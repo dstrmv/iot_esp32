@@ -5,6 +5,7 @@ const char *ssid = "Keenetic-0219";
 const char *password = "EMGbmepp";
 
 WiFiServer server(8081);
+WiFiClient client;
 
 void setup()
 {
@@ -35,28 +36,30 @@ void setup()
   server.begin();
 }
 
-int value = 0;
-
 void loop()
 {
-  WiFiClient client = server.available(); // listen for incoming clients
+  client = server.available();
+
+  // listen for incoming clients
 
   if (client)
   {                                // if you get a client,
     Serial.println("New Client."); // print a message out the serial port
     while (client.connected())
-    { // loop while the client's connected
+    {
       if (client.available())
       {                         // if there's bytes to read from the client,
         char c = client.read(); // read a byte
         if (c == '1')
         {
           Serial.write(c);
+          Serial.println();
           digitalWrite(LED_BUILTIN, HIGH); // GET /H turns the LED on
         }
         else if (c == '0')
         {
           Serial.write(c);
+          Serial.println();
           digitalWrite(LED_BUILTIN, LOW); // GET /L turns the LED off
         }
       }
